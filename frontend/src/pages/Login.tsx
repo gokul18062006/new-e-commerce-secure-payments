@@ -21,7 +21,7 @@ export default function Login() {
         : await loginUser(email, password);
       login(res.data.access_token);
     } catch (err: any) {
-      setError(err.response?.data?.detail || "Something went wrong");
+      setError(err.response?.data?.detail || "Authentication sequence failed");
     } finally {
       setLoading(false);
     }
@@ -29,48 +29,71 @@ export default function Login() {
 
   return (
     <div className="auth-page">
-      <div className="auth-card">
-        <div style={{ textAlign: "center", fontSize: "3rem", marginBottom: 8 }}>🔐</div>
-        <h1>{isRegister ? "Create Account" : "Welcome Back"}</h1>
-        <p className="subtitle">
-          {isRegister ? "Join SecurePay for secure shopping" : "Sign in to your account"}
+      <div className="auth-card glass fade-in-up">
+        <div style={{ 
+          width: '80px', height: '80px', borderRadius: '24px', 
+          background: 'rgba(16, 185, 129, 0.1)', border: '1px solid var(--glass-border)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', 
+          fontSize: '2.5rem', margin: '0 auto 24px' 
+        }}>🛡️</div>
+        
+        <h1>{isRegister ? "Join the Network" : "Secure Access"}</h1>
+        <p className="subtitle" style={{ marginBottom: '32px' }}>
+          {isRegister ? "Create your encrypted profile" : "Verify your identity to proceed"}
         </p>
 
-        {error && <div className="error">{error}</div>}
+        {error && <div className="error" style={{ 
+          padding: '12px', borderRadius: '12px', background: 'rgba(244, 63, 94, 0.1)', 
+          color: 'var(--accent-rose)', fontSize: '0.9rem', marginBottom: '20px', textAlign: 'center' 
+        }}>{error}</div>}
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {isRegister && (
             <div className="input-group">
-              <label htmlFor="name">Full Name</label>
-              <input id="name" className="input-field" type="text" placeholder="Gokul"
-                value={name} onChange={(e) => setName(e.target.value)} required />
+              <input 
+                className="input-field" type="text" placeholder="Full Identity Name"
+                value={name} onChange={(e) => setName(e.target.value)} required 
+              />
             </div>
           )}
           <div className="input-group">
-            <label htmlFor="email">Email</label>
-            <input id="email" className="input-field" type="email" placeholder="you@email.com"
-              value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input 
+              className="input-field" type="email" placeholder="Access Email"
+              value={email} onChange={(e) => setEmail(e.target.value)} required 
+            />
           </div>
           <div className="input-group">
-            <label htmlFor="password">Password</label>
-            <input id="password" className="input-field" type="password" placeholder="••••••••"
-              value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
+            <input 
+              className="input-field" type="password" placeholder="Security Token (Password)"
+              value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} 
+            />
           </div>
-          <button className="btn btn-primary btn-lg" type="submit" disabled={loading}
-            style={{ width: "100%", marginTop: 8 }}>
-            {loading ? <span className="spinner" /> : (isRegister ? "Create Account 🚀" : "Sign In 🔑")}
+          <button className="btn btn-primary" type="submit" disabled={loading}
+            style={{ width: "100%", padding: '16px' }}>
+            {loading ? <div className="spinner" /> : (isRegister ? "Initialize Account" : "Authorize Access")}
           </button>
         </form>
 
-        <div className="toggle">
-          {isRegister ? "Already have an account?" : "Don't have an account?"}{" "}
-          <button onClick={() => { setIsRegister(!isRegister); setError(""); }}>
+        <div className="toggle" style={{ marginTop: '24px', textAlign: 'center', fontSize: '0.9rem' }}>
+          <span style={{ color: 'var(--text-400)' }}>
+            {isRegister ? "Already part of the network?" : "New to the platform?"}
+          </span>{" "}
+          <button 
+            onClick={() => { setIsRegister(!isRegister); setError(""); }}
+            style={{ 
+              background: 'none', border: 'none', color: 'var(--accent-emerald)', 
+              fontWeight: '700', cursor: 'pointer', outline: 'none' 
+            }}
+          >
             {isRegister ? "Sign In" : "Register"}
           </button>
         </div>
 
-        <div style={{ marginTop: 24, padding: 16, background: "rgba(16,185,129,0.08)", borderRadius: 12, fontSize: "0.8rem", color: "#9d9dab", textAlign: "center" }}>
-          🔒 Protected with JWT Authentication &amp; Bcrypt Password Hashing
+        <div style={{ 
+          marginTop: 32, padding: '16px', borderTop: '1px solid var(--glass-border)', 
+          fontSize: "0.75rem", color: "var(--text-500)", textAlign: "center" 
+        }}>
+          Protocol: SHA-256 Hashing | AES-256 Encryption
         </div>
       </div>
     </div>
